@@ -148,4 +148,24 @@ export class SinglyLinkedList {
     before.next = newNode;
     this.size++;
   }
+
+  
+  /**
+   * Searches for a node with the specified key in the singly linked list.
+   * @param {*} key - The key to search for in the list.
+   * @returns {boolean} Returns true if a node with the given key is found; otherwise, returns undefined.
+   */
+  find(key) {
+    let current = this.head;
+
+    while (current) {
+      if (current.key === key) {
+        return true;
+      }
+
+      current = current.next;
+    }
+
+    return false;
+  }
 }

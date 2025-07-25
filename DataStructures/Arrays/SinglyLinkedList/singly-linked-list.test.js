@@ -187,4 +187,20 @@ describe("SinglyLinkedList", () => {
       expect(list.topBack()).toBeNull();
     });
   });
+
+  describe("find", () => {
+    test("should return true if the key exists in the list", () => {
+      list.pushBack("A");
+      list.pushBack("X");
+      list.pushBack("B");
+      expect(list.find("X")).toBe(true);
+      expect(list.find("B")).toBe(true);
+    });
+
+    test("should return false if the key does not exist in the list", () => {
+      list.pushBack("A");
+      list.pushBack("B");
+      expect(list.find("C")).toBe(false);
+    });
+  });
 });
