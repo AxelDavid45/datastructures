@@ -2,10 +2,11 @@ class Node {
   constructor(key) {
     this.key = key;
     this.next = null;
+    this.prev = null;
   }
 }
 
-export class SinglyLinkedList {
+export class DoublyLinkedList {
   constructor() {
     this.head = null;
     this.tail = null;
