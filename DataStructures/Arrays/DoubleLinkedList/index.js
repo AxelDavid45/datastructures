@@ -41,9 +41,15 @@ export class DoublyLinkedList {
     const newNode = new Node(key);
     newNode.next = this.head;
     this.head = newNode;
+
+    if (newNode.next != null) {
+      newNode.next.prev = newNode;
+    }
+
     if (this.tail === null) {
       this.tail = newNode;
     }
+
     this.size++;
   }
 
@@ -55,6 +61,7 @@ export class DoublyLinkedList {
     const value = this.head.key;
 
     this.head = this.head.next;
+    this.head.prev = null;
 
     if (this.head === null) {
       this.tail = null;
@@ -71,7 +78,9 @@ export class DoublyLinkedList {
       this.head = this.tail = newNode;
     } else {
       // tail points to last node, change next from lastNode
+      newNode.prev = this.tail;
       this.tail.next = newNode;
+      newNode.next = null;
       // update tail to new node
       this.tail = newNode;
     }
@@ -89,16 +98,8 @@ export class DoublyLinkedList {
       return;
     }
 
-    let current = this.head;
-
-    // traverse to the second last node
-    while (current.next.next !== null) {
-      current = current.next;
-    }
-
-    current.next = null;
-
-    this.tail = current;
+    this.tail = this.tail.prev;
+    this.tail.next = null;
 
     this.size--;
   }
@@ -107,13 +108,21 @@ export class DoublyLinkedList {
     if (!node) {
       throw new Error("Node cannot be null");
     }
+
     const newNode = new Node(key);
+
     newNode.next = node.next;
+    newNode.prev = node;
     node.next = newNode;
+
+    if (newNode.next != null) {
+      newNode.next.prev = newNode;
+    }
 
     if (node === this.tail) {
       this.tail = newNode;
     }
+
     this.size++;
   }
 
@@ -123,30 +132,20 @@ export class DoublyLinkedList {
     }
 
     const newNode = new Node(key);
+    newNode.next = node;
+
+    const oldPrev = node.prev;
+    newNode.prev = oldPrev;
+    node.prev = newNode;
+
+    if (oldPrev != null) {
+      oldPrev.next = newNode;
+    }
 
     if (node === this.head) {
-      newNode.next = this.head;
-      this.head = newNode;
-      this.size++;
-      return;
+      this.head = node;
     }
 
-    let before = this.head;
-
-    while (before && before.next !== node) {
-      // if node is not found next iteration before will be null
-      before = before.next;
-    }
-
-    if (!before) {
-      throw new Error("Node not found in the list");
-    }
-
-    // [1] -> [2] -> [3]
-    // append before 3
-    // [1] -> [2] -> [newNode] -> [3]
-    newNode.next = before.next;
-    before.next = newNode;
     this.size++;
   }
 
@@ -161,6 +160,20 @@ export class DoublyLinkedList {
     while (current) {
       if (current.key === key) {
         return true;
+      }
+
+      current = current.next;
+    }
+
+    return false;
+  }
+
+  findNode(key) {
+    let current = this.head;
+
+    while (current) {
+      if (current.key === key) {
+        return current;
       }
 
       current = current.next;
